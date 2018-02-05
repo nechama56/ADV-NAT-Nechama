@@ -1,0 +1,54 @@
+* >Natural Source Header 000000
+* :Mode S
+* :CP
+* :LineIncrement 10
+* <Natural Source Header
+/** Measuring diferrences between WHERE and ACCEPT 
+/**
+/** :AUTHOR NECHAMA
+
+DEFINE DATA LOCAL 
+1 MYVIEW VIEW OF EMPLOYEES 
+2 NAME 
+1 #NUM (P3) 
+1 #COUNTER (P5) 
+1 #CPU-START (P9) 
+1 #CPU-END (P9) 
+1 #CPU-ELAPSED (P9) 
+1 #i (i4)
+END-DEFINE 
+* 
+
+MOVE *CPU-TIME TO #CPU-START 
+STARTA. SETTIME 
+for #i = 1 to 1000
+READR. READ MYVIEW WHERE NAME = 'XX' 
+IGNORE 
+END-READ 
+end-for
+WRITE 5T 'WHERE TIME: ' *TIMD (STARTA.) 
+COMPUTE #CPU-ELAPSED = *CPU-TIME - #CPU-START 
+WRITE 5T 'ELAPSED CPU TIME' #CPU-ELAPSED // 5T '*' (45) 
+******************************************* 
+
+* 
+MOVE *CPU-TIME TO #CPU-START 
+STARTB. SETTIME 
+for #i = 1 to 1000
+
+READR2. READ MYVIEW 
+* 
+ACCEPT IF NAME = 'XX' 
+IGNORE 
+
+END-READ 
+end-for
+
+WRITE // 5T 'ACCEPT TIME ' *TIMD (STARTB.) 
+COMPUTE #CPU-ELAPSED = *CPU-TIME - #CPU-START 
+WRITE 5T 'ELAPSED CPU TIME' #CPU-ELAPSED // 5T '*' (45) 
+
+* 
+END 
+
+

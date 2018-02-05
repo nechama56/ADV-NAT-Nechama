@@ -1,0 +1,72 @@
+* >Natural Source Header 000000
+* :Mode S
+* :CP windows-1255
+* :LineIncrement 10
+* <Natural Source Header
+DEFINE DATA
+LOCAL
+1 #FIELD-N   (P2)
+1 #FIELD-B   (A1)
+1 #LOOP (P9)
+END-DEFINE
+*
+* write #field-n #field-b
+SETA. SETTIME
+FOR #LOOP = 1 TO 10000
+
+  DECIDE FOR FIRST CONDITION
+    WHEN #FIELD-N =  1 THRU 10  AND #FIELD-B = 'A'
+      MOVE 10 TO #FIELD-N
+
+    WHEN #FIELD-N = 11 THRU 20  AND #FIELD-B = 'A'
+      MOVE 20 TO #FIELD-N
+    WHEN NONE
+      IGNORE
+      MOVE 20 TO #FIELD-N
+  END-DECIDE
+END-FOR
+WRITE 5T 'DECIDE TIME' *TIMD (SETA.)
+* write #field-n #field-b
+
+SETB. SETTIME
+FOR #LOOP = 1 TO 10000
+
+  IF #FiELD-N =  1 THRU 10  AND #FIELD-B = 'A'
+    MOVE 10 TO #FIELD-N
+
+  ELSE
+    IF #FIELD-N = 11 THRU 20 AND #FIELD-B = 'A'
+      MOVE 20 TO #FIELD-N
+
+    ELSE
+      MOVE 30 TO #FIELD-N
+    END-IF
+  END-IF
+END-FOR
+WRITE 5T 'IF TIME' *TIMD (SETB.)
+* write #field-n #field-b
+
+SETC. SETTIME
+FOR #LOOP = 1 TO 10000
+
+  IF #FIELD-B = 'A'
+    IF #FIELD-N  GE  1
+      IF #FIELD-N  LE  10
+        MOVE 10 TO #FIELD-N
+      END-IF
+      IF #FIELD-N LE 20
+        MOVE 20 TO #FIELD-N
+      ELSE
+        MOVE 30 TO #FIELD-N
+      END-IF
+    END-IF
+  ELSE
+    MOVE 40 TO #FIELD-N
+  END-IF
+
+END-FOR
+WRITE 5T 'nested if TIME' *TIMD (SETC.)
+* write #field-n #field-b
+
+END
+

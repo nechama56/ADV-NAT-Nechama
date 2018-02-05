@@ -1,0 +1,51 @@
+* >Natural Source Header 000000
+* :Mode R
+* :CP windows-1255
+* :LineIncrement 10
+* <Natural Source Header
+DEFINE DATA LOCAL
+1 NATRC                         (I4) INIT <0>
+1 #DBFNRLOG-PARMSgfgfgfgKOVETZ     (N3)
+  2 #DBFNRLOG-DATABASE-AMITI    (N3)
+  2 #DBFNRLOG-KOVETZ-AMITI      (N3)
+1 DBID                          (A1)
+1 UDB                           (N2)
+1 #OVED-BE-TEST                 (L)
+1 #REM                          (N1)
+1 #NODE                         (N3)
+END-DEFINE
+
+CALLNAT 'DBNUM' DBID UDB   /* TEST OR PROD
+IF DBID = 'T'
+  #NODE := 13
+  MOVE TRUE TO #OVED-BE-TEST
+ELSE
+  #NODE := 149
+  RESET #OVED-BE-TEST
+END-IF
+.
+.
+.
+IF #OVED-BE-TEST
+  #DBFNRLOG-DATABASE-AMITI := 21
+ELSE
+  #DBFNRLOG-DATABASE-AMITI     := 8
+END-IF
+
+#DBFNRLOG-MISPAR-KOVETZ        := 47
+IF #MISPAR-BANK = 10
+  #DBFNRLOG-KOVETZ-AMITI       := 47
+ELSE
+  IF #MISPAR-BANK = 13
+     #DBFNRLOG-KOVETZ-AMITI     := 149
+  ELSE
+     IF #MISPAR-BANK = 34
+        #DBFNRLOG-KOVETZ-AMITI   := 147
+     END-IF
+  END-IF
+END-IF
+
+CALLNAT 'DBFNRLOG' #DBFNRLOG-PARMS
+ 
+
+

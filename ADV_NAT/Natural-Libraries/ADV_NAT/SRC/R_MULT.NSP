@@ -1,0 +1,50 @@
+* >Natural Source Header 000000
+* :Mode S
+* :CP
+* :LineIncrement 10
+* <Natural Source Header
+/** Test Multi-Fetch
+/**
+/** :author nechama
+/* TODO: Enter your code here
+define data local
+/*( imported data fields from Data Definition Module EMPLOYEE
+1 EMPLOYEES VIEW OF EMPLOYEES
+  2 PERSONNEL-ID (A8)
+  2 BIRTH (D)
+1 #i (i4)
+
+END-DEFINE
+
+
+read  EMPLOYEES with PERSONNEL-ID starting from  '1'
+end-read
+
+
+WRITE NOTITLE 20X 'AND TEST ' /
+
+WRITE NOTITLE // 'READ: '
+ST_SA. SETTIME
+WRITE NOTITLE  10X 'Start TIME:  ' *TIME
+for #i = 1 to 100  
+  r4. read  EMPLOYEES with PERSONNEL-ID starting from  '1'
+      PERSONNEL-ID := PERSONNEL-ID
+    end-read END-FOR
+WRITE NOTITLE 10X 'End TIME:    ' *TIME
+WRITE         10X 'Elapsed TIME'
+  '(HH:II:SS.T) :' *TIMD (ST_SA.) (EM=99:99:99'.'9)
+Write NOTITLE 10X 'Result - Number of records:' *counter(r4.)//
+
+WRITE NOTITLE // 'READ: '
+ST_MU. SETTIME
+WRITE NOTITLE  10X 'Start TIME:  ' *TIME
+for #i = 1 to 100  
+  r5. read  MULTI-FETCH 200 EMPLOYEES with PERSONNEL-ID starting from  '1'
+      PERSONNEL-ID := PERSONNEL-ID
+    end-read END-FOR
+WRITE NOTITLE 10X 'End TIME:    ' *TIME
+WRITE         10X 'Elapsed TIME'
+  '(HH:II:SS.T) :' *TIMD (ST_MU.) (EM=99:99:99'.'9)
+Write NOTITLE 10X 'Result - Number of records:' *counter(r5.)
+
+END

@@ -1,0 +1,35 @@
+* >Natural Source Header 000000
+* :Mode S
+* :CP
+* :LineIncrement 10
+* <Natural Source Header
+** Example 'CPU-TIME': SETTIME                                            
+************************************************************************
+
+DEFINE DATA LOCAL
+1 EMPLOY-VIEW VIEW OF EMPLOYEES
+  2 NAME
+1 #NUM (P3)
+1 #COUNTER (P5)
+1 #CPU-START (P9)
+1 #CPU-END (P9)
+1 #CPU-ELAPSED (P9)
+END-DEFINE
+*
+
+MOVE *CPU-TIME TO #CPU-START
+STARTA. SETTIME
+
+READ  EMPLOY-VIEW BY NAME
+END-READ
+
+WRITE 5T 'WHERE TIME: ' *TIMD (STARTA.)
+COMPUTE #CPU-ELAPSED = *CPU-TIME - #CPU-START
+
+WRITE 5T 'ELAPSED CPU TIME' #CPU-ELAPSED
+*******************************************
+
+
+END
+
+

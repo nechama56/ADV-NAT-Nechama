@@ -1,0 +1,80 @@
+* >Natural Source Header 000000
+* :Mode S
+* :CP windows-1255
+* :LineIncrement 10
+* <Natural Source Header
+* Interesting. I changed my original PC program to look for XXXX not XXX. 
+* I also commented out the **MOVE 'XXX' TO #ARRAY (10).
+* In my previous run, the EXAMINE array was cutting out after the tenth occurrence since I had GIVING INDEX, not GIVING NUMBER. Sometimes playing with "old" programs can be tricky.
+* Here is the result:
+* THIS PROGRAM DEMONSTRATES HOW EXPENSIVE IT IS TO EXAMINE AN ARRAY
+* AS OPPOSED TO EXAMINE'ING A STRING.
+*
+DEFINE DATA LOCAL
+1 #STRING-TABLE (200)
+  2 #ARRAY (A4)
+  2 #DUMMY (A1)
+1 REDEFINE #STRING-TABLE
+  2 #STRING (a1000)
+1 #LOOP (P9)
+1 #NUMBER (P3)
+1 #CPU-START (P9)
+1 #CPU-ELAPSED (P9)
+END-DEFINE
+*
+* INCLUDE AATITLER
+* INCLUDE AASETC
+* *
+**MOVE 'XXX' TO #ARRAY (10)
+MOVE *CPU-TIME TO #CPU-START
+seta. SETTIME
+FOR #LOOP = 1 TO 300000
+IGNORE
+END-FOR
+COMPUTE #CPU-ELAPSED = *CPU-TIME - #CPU-START
+WRITE 3/10 'CONTROL LOOP TIME==>' *TIMD (seta.) #CPU-ELAPSED
+*
+MOVE *CPU-TIME TO #CPU-START
+setb. SETTIME
+FOR #LOOP = 1 TO 300000
+EXAMINE #STRING FOR 'XXXX' GIVING NUMBER #NUMBER
+*
+IF #NUMBER = 0
+  IGNORE
+  END-IF
+END-FOR
+COMPUTE #CPU-ELAPSED = *CPU-TIME - #CPU-START
+WRITE 3/10 'string TIME==>' *TIMD (setb.) #CPU-ELAPSED
+*
+
+*
+MOVE *CPU-TIME TO #CPU-START
+setc. SETTIME
+FOR #LOOP = 1 TO 300000
+EXAMINE #ARRAY (*) FOR 'XXXX' GIVING number #NUMBER
+IF #NUMBER = 0
+  IGNORE
+  END-IF
+END-FOR
+COMPUTE #CPU-ELAPSED = *CPU-TIME - #CPU-START
+WRITE 3/10 'array TIME==>' *TIMD (setc.) #CPU-ELAPSED
+*
+
+END
+* 
+* 
+*     PAGE #   1                    DATE:    17-09-26
+*     PROGRAM: EXAMIN09             LIBRARY: BOSTON01
+*  
+*  
+*  
+*          CONTROL LOOP TIME==>        3         25
+*  
+*  
+*          string TIME==>        9         92
+*  
+*  
+*          array TIME==>       48        485
+* 
+* Now the string time really beats the array time. This saves about 90%.
+

@@ -1,0 +1,55 @@
+* >Natural Source Header 000000
+* :Mode S
+* :CP windows-1255
+* :LineIncrement 10
+* <Natural Source Header
+DEFINE DATA LOCAL
+1 #TABLE (A3/1:500)
+1 REDEFINE #TABLE
+  2 #STRING (A1500)
+1 #LOOP (P5)
+1 #SUB (P3)
+END-DEFINE
+*
+* INCLUDE AATITLER
+* INCLUDE AASETC
+* *
+SETB. SETTIME
+FOR #LOOP = 1 TO 10000
+    EXAMINE #TABLE (*) FOR 'X' GIVING POSITION #SUB
+    IF #SUB NE 0
+       IGNORE
+       END-IF
+
+END-FOR
+WRITE 5T 'EXAMINE ARRAY TIME:' *TIMD (SETB.)
+*
+SETD. SETTIME
+FOR #LOOP = 1 TO 10000
+    EXAMINE #STRING FOR 'XXX' GIVING POSITION #SUB
+    IF #SUB NE 0
+       IGNORE
+       END-IF
+
+END-FOR
+WRITE 5T 'EXAMINE STRING TIME:' *TIMD (SETD.) //
+*
+SETC. SETTIME
+FOR #LOOP = 1 TO 10000
+IGNORE
+END-FOR
+WRITE 5T 'OVERHEAD OF FOR LOOP ITSELF' *TIMD (SETC.)
+*
+END
+* 
+* 
+*     PAGE #   1                    DATE:    Jul 17, 2003
+*     PROGRAM: EXAM07               LIBRARY: WWTOUR
+* 
+*     EXAMINE ARRAY TIME:       24
+*     EXAMINE STRING TIME:        2
+* 
+* 
+*     OVERHEAD OF FOR LOOP ITSELF        1
+* Looks like they re-wrote the EXAMINE ARRAY (*) on the PC.
+

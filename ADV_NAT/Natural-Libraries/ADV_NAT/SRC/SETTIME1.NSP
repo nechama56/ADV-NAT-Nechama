@@ -1,0 +1,30 @@
+* >Natural Source Header 000000
+* :Mode S
+* :CP windows-1255
+* :LineIncrement 10
+* <Natural Source Header
+** Example 'STIEX1': SETTIME                                            
+************************************************************************
+DEFINE DATA LOCAL                                                       
+1 EMPLOY-VIEW VIEW OF EMPLOYEES                                         
+  2 NAME                                                                
+END-DEFINE                                                              
+*                                                                       
+ST. SETTIME                                                      
+WRITE 10X 'START TIME:' *TIME                                           
+*                                                                       
+READ (100) EMPLOY-VIEW BY NAME                                          
+END-READ
+*                                                                       
+WRITE NOTITLE 10X 'END TIME:  ' *TIME                                   
+WRITE         10X 'ELAPSED TIME TO READ 100 RECORDS'                    
+                  '(HH:II:SS.T) :' *TIMD (ST.) (EM=99:99:99'.'9) 
+*                                                                       
+END
+
+* Output of Program STIEX1:
+* START TIME: 16:39:07.6                                    
+* END TIME:   16:39:07.7                                    
+* ELAPSED TIME TO READ 100 RECORDS (HH:MM:SS.T) : 00:00:00.1
+* 
+

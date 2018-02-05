@@ -1,0 +1,54 @@
+* >Natural Source Header 000000
+* :Mode S
+* :CP
+* :LineIncrement 10
+* <Natural Source Header
+
+/** Test Or Retain
+/**
+define data local
+/*( imported data fields from Data Definition Module EMPLOYEE
+1 EMPLOYEES VIEW OF EMPLOYEES
+  2 PERSONNEL-ID (A8)
+  2 BIRTH (D)
+1 #i (i4)
+
+END-DEFINE
+
+find number EMPLOYEES with PERSONNEL-ID > '1'
+find number EMPLOYEES with BIRTH =  D'1950-01-01' thru d'1975-01-01'
+
+
+WRITE NOTITLE  20x 'OR TEST: '/
+WRITE NOTITLE 'SEPARATE FIND: '
+
+ST_ID. SETTIME
+WRITE NOTITLE 10X 'Start TIME:  ' *TIME
+
+for  #i = 1 to 10000 
+  find number EMPLOYEES with PERSONNEL-ID > '1' retain as 'rt1'
+find number EMPLOYEES with BIRTH =  D'1950-01-01' thru d'1975-01-01' retain as 'rt2'
+  f3. find number EMPLOYEES with 'rt1' OR  'rt2' retain as 'rta'
+
+END-FOR
+WRITE NOTITLE 10X 'End TIME:    ' *TIME
+
+WRITE         10X 'Elapsed TIME'
+  '(HH:II:SS.T) :' *TIMD (ST_ID.) (EM=99:99:99'.'9)
+Write NOTITLE 10X 'Result - Number of records:' *number(f3.)
+
+
+WRITE NOTITLE // 'Joined FIND: '
+ST_SA. SETTIME
+WRITE NOTITLE  10X 'Start TIME:  ' *TIME
+for #i = 1 to 10000 
+f4.  find number EMPLOYEES with PERSONNEL-ID > '1' OR BIRTH =  D'1950-01-01' thru d'1975-01-01'
+    retain as 'rt3'
+END-FOR
+WRITE NOTITLE 10X 'End TIME:    ' *TIME
+WRITE         10X 'Elapsed TIME'
+  '(HH:II:SS.T) :' *TIMD (ST_SA.) (EM=99:99:99'.'9)
+Write NOTITLE 10X 'Result - Number of records:' *number(f4.)
+
+
+END
